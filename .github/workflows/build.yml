@@ -31,18 +31,18 @@ jobs:
             build_args: release android armeabi-v7a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-armeabi-v7a
             artifact_name: build\Release\android-armeabi-v7a\libveldrid-spirv.so
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             build_args: release linux-x64
             build_target: linux-x64
             artifact_name: build/Release/linux-x64/libveldrid-spirv.so
-          - os: macos-latest
+          - os: macos-11
             build_args: release osx 'arm64;x86_64'
             build_target: osx
             artifact_name: build/Release/osx/libveldrid-spirv.dylib
           - os: macos-latest
             build_args: release ios
             build_target: ios
-            artifact_name: build/Release/ios/libveldrid-spirv-combined.a
+            artifact_name: build/Release/ios/veldrid-spirv.xcframework.zip
     name: ${{ matrix.build_target }} Native Build
 
     steps:
@@ -70,6 +70,12 @@ jobs:
                 ./build-native.sh ${{ matrix.build_args }}
               fi
         shell: bash
+
+      - name: Compress iOS Framework For Upload
+        if: ${{ matrix.build_target == 'ios' }}
+        run:  |
+              cp -r build/Release/ios/veldrid-spirv.xcframework ./
+              zip -r ${{ matrix.artifact_name }} veldrid-spirv.xcframework
 
       # We can only run per-platform tests on 64-bit architectures
       # https://github.com/actions/setup-dotnet/issues/72
@@ -151,6 +157,11 @@ jobs:
           name: ios
           path: build/Release/ios
 
+      - name: Uncompress iOS Framework
+        run:  |
+              unzip -qq build/Release/ios/veldrid-spirv.xcframework.zip -d build/Release/ios
+              rm build/Release/ios/veldrid-spirv.xcframework.zip
+
       - name: Install .NET
         uses: actions/setup-dotnet@v1
         with:
@@ -171,5 +182,5 @@ jobs:
 
       - name: Publish to nuget.org
         if: startsWith(github.ref, 'refs/tags/')
-        run: dotnet nuget push bin\Packages\Release\*.nupkg -s https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_KEY}}
+        run: dotnet nuget push bin\Packages\Release\*.nupkg -s https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}}
 
