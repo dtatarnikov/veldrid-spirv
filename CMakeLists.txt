@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.5...3.28)
+cmake_minimum_required (VERSION 3.0)
 
 if(IOS)
     include(ios/ios.toolchain.cmake)
