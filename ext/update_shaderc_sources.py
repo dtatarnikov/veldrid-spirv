@@ -17,7 +17,7 @@ repositories."""
 from operator import attrgetter
 import argparse
 import json
-import distutils.dir_util
+import pathlib
 import os.path
 import subprocess
 import sys
@@ -58,7 +58,7 @@ class GoodCommit(object):
     def GetUrl(self, style='https'):
         """Returns the URL for the repository."""
         host = SITE_TO_HOST[self.site]
-        sep = '/' if (style is 'https') else ':'
+        sep = '/' if (style == 'https') else ':'
         return '{style}://{host}{sep}{subrepo}'.format(
             style=style,
             host=host,
@@ -75,7 +75,7 @@ class GoodCommit(object):
                                      self.commit + '^{commit}'],
                                     cwd=self.subdir)
     def Clone(self):
-        distutils.dir_util.mkpath(self.subdir)
+        pathlib.Path(self.subdir).mkdir(parents=True, exist_ok=True)
         command_output(['git', 'clone', self.GetUrl(), '.'], self.subdir)
     def Fetch(self):
         command_output(['git', 'fetch', 'known-good'], self.subdir)
@@ -99,7 +99,7 @@ def main():
                         help="The file containing known-good commits. Default is \'' + KNOWN_GOOD_FILE + '\'.")
     args = parser.parse_args()
     commits = GetGoodCommits(args.known_good_file)
-    distutils.dir_util.mkpath(args.dir)
+    pathlib.Path(args.dir).mkdir(parents=True, exist_ok=True)
     print('Change directory to {d}'.format(d=args.dir))
     os.chdir(args.dir)
     # Create the subdirectories in sorted order so that parent git repositories
