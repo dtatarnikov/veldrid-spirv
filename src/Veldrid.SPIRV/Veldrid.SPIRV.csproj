@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Nuget">
-    <PackageId>ppy.Veldrid.SPIRV</PackageId>
+    <PackageId>Veldrid.SPIRV</PackageId>
     <Version>0.0.0</Version>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>ppy.Veldrid.SPIRV</AssemblyName>
+    <AssemblyName>Veldrid.SPIRV</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <NativeAssetsPath Condition="'$(NativeAssetsPath)' == ''">$(RepositoryRootDirectory)/build/</NativeAssetsPath>
@@ -16,7 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-    <PackageReference Include="ppy.Veldrid" Version="4.9.3-g91ce5a6cda" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\veldrid\src\Veldrid\Veldrid.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,10 +39,6 @@
           <PackagePath>runtimes/ios/native</PackagePath>
           <Pack>true</Pack>
       </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.4.255" />
   </ItemGroup>
 
   <Target Name="BeforePackage" BeforeTargets="AssignTargetPaths">
