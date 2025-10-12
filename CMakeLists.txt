@@ -40,7 +40,7 @@ if(IOS)
     set_target_properties(veldrid-spirv PROPERTIES FRAMEWORK true)
 endif()
 
-set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_IDENTIFIER "sh.ppy.veldrid-spirv")
+set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_IDENTIFIER "sh.veldrid-spirv")
 set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_BUNDLE_VERSION "1.0.15")
 set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_SHORT_VERSION_STRING "1.0.15")
 
