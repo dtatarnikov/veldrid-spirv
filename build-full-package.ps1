@@ -131,11 +131,3 @@ $env:PublicRelease = ${public}
 dotnet restore src\Veldrid.SPIRV\Veldrid.SPIRV.csproj
 
 dotnet msbuild src\Veldrid.SPIRV\Veldrid.SPIRV.csproj /t:Pack
-
-dotnet restore src\Veldrid.SPIRV.VariantCompiler\Veldrid.SPIRV.VariantCompiler.csproj --source ${PSScriptRoot}\bin\Packages\Release --no-cache
-
-dotnet msbuild src\Veldrid.SPIRV.VariantCompiler\Veldrid.SPIRV.VariantCompiler.csproj
-
-dotnet restore src\Veldrid.SPIRV.BuildTools\Veldrid.SPIRV.BuildTools.csproj --source ${PSScriptRoot}\bin\Packages\Release
-
-dotnet msbuild src\Veldrid.SPIRV.BuildTools\Veldrid.SPIRV.BuildTools.csproj /t:Pack
