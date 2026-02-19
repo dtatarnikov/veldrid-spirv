@@ -11,7 +11,7 @@
     <AssemblyName>Veldrid.SPIRV</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
-    <NativeAssetsPath Condition="'$(NativeAssetsPath)' == ''">$(RepositoryRootDirectory)\build\$(Configuration)\</NativeAssetsPath>
+    <NativeAssetsPath>$(RepositoryRootDirectory)\build\$(Configuration)\</NativeAssetsPath>
   </PropertyGroup>
   
   <ItemGroup>

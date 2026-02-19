@@ -291,7 +291,7 @@ namespace Veldrid.SPIRV
             }
 
             int macroCount = options.Macros.Length;
-            NativeMacroDefinition* macros = stackalloc NativeMacroDefinition[(int)macroCount];
+            NativeMacroDefinition* macros = stackalloc NativeMacroDefinition[macroCount];
             for (int i = 0; i < macroCount; i++)
             {
                 macros[i] = new NativeMacroDefinition(options.Macros[i]);
