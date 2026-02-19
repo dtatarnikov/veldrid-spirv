@@ -1,10 +1,9 @@
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.10)
 
 cmake_policy(SET CMP0057 NEW)
 
 project(veldrid-spirv)
 
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
 if(IOS)
