@@ -1,5 +1,6 @@
 name: CI
 on:
+  workflow_dispatch:
   create: # when tags are created
   push:
     branches: [ master ]
@@ -9,6 +10,7 @@ jobs:
   native_builds:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
@@ -19,6 +21,10 @@ jobs:
             build_args: Release win-x86
             build_target: win-x86
             artifact_name: build\Release\win-x86\libveldrid-spirv.dll
+          - os: windows-latest
+            build_args: Release win-arm64
+            build_target: win-arm64
+            artifact_name: build\Release\win-arm64\libveldrid-spirv.dll
           - os: windows-latest
             build_args: release android arm64-v8a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-arm64-v8a
@@ -31,11 +37,15 @@ jobs:
             build_args: release android armeabi-v7a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-armeabi-v7a
             artifact_name: build\Release\android-armeabi-v7a\libveldrid-spirv.so
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             build_args: release linux-x64
             build_target: linux-x64
             artifact_name: build/Release/linux-x64/libveldrid-spirv.so
-          - os: macos-11
+          - os: ubuntu-22.04-arm
+            build_args: release linux-arm64
+            build_target: linux-arm64
+            artifact_name: build/Release/linux-arm64/libveldrid-spirv.so
+          - os: macos-latest
             build_args: release osx 'arm64;x86_64'
             build_target: osx
             artifact_name: build/Release/osx/libveldrid-spirv.dylib
@@ -121,6 +131,12 @@ jobs:
           name: win-x86
           path: build/Release/win-x86
 
+      - name: Download win-arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: win-arm64
+          path: build/Release/win-arm64
+
       - name: Download android-arm64-v8a
         uses: actions/download-artifact@v2
         with:
@@ -144,6 +160,12 @@ jobs:
         with:
           name: linux-x64
           path: build/Release/linux-x64
+
+      - name: Download linux-arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-arm64
+          path: build/Release/linux-arm64
 
       - name: Download osx
         uses: actions/download-artifact@v2

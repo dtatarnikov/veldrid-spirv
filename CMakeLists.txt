@@ -1,4 +1,11 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.5)
+
+cmake_policy(SET CMP0057 NEW)
+
+project(veldrid-spirv)
+
+#set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
 if(IOS)
     include(ios/ios.toolchain.cmake)
@@ -18,8 +25,6 @@ include_directories(ext/SPIRV-Cross/include)
 include_directories(ext/shaderc/libshaderc/include/shaderc)
 
 file(GLOB_RECURSE LIBVELDRID_SPIRV_SOURCES src/libveldrid-spirv/*.cpp src/libveldrid-spirv/*.hpp)
-
-project(veldrid-spirv)
 
 set(LIBRARY_TYPE SHARED)
 message( "Configured to build a shared library." )

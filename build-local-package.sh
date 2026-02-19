@@ -27,6 +27,9 @@ while :; do
         linux-x64)
             _Platform=linux-x64
             ;;
+		linux-arm64)
+            _Platform=linux-arm64
+            ;;
         *)
             __UnprocessedBuildArgs="$__UnprocessedBuildArgs $1"
     esac

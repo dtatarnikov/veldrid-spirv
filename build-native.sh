@@ -31,10 +31,13 @@ while :; do
         linux-x64)
             _OSDir=linux-x64
             ;;
+		linux-arm64)
+            _OSDir=linux-arm64
+            ;;
         ios)
             _CMakeEnableBitcode=-DENABLE_BITCODE=0
             _CMakeBuildTarget=veldrid-spirv
-            _CMakeGenerator="-G Xcode -T buildsystem=1"
+            _CMakeGenerator="-G Xcode"
             _CMakeExtraBuildArgs="--config Release"
             _OSDir=ios
             ;;
@@ -64,15 +67,35 @@ if [[ $_OSDir == "ios" ]]; then
 
     popd
 
-    mkdir -p simulator-build
-    pushd simulator-build
+    mkdir -p simulator-build-arm64
+    pushd simulator-build-arm64
+
+    cmake ../../../.. -DIOS=ON -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator -DPLATFORM=SIMULATORARM64 -DDEPLOYMENT_TARGET=13.4 $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
+    cmake --build . --target $_CMakeBuildTarget $_CMakeExtraBuildArgs
+
+    popd
+
+    mkdir -p simulator-build-x64
+    pushd simulator-build-x64
 
     cmake ../../../.. -DIOS=ON -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator -DPLATFORM=SIMULATOR64 -DDEPLOYMENT_TARGET=13.4 $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
     cmake --build . --target $_CMakeBuildTarget $_CMakeExtraBuildArgs
 
     popd
 
-    xcodebuild -create-xcframework -framework ./device-build/Release-iphoneos/veldrid-spirv.framework -framework ./simulator-build/Release-iphonesimulator/veldrid-spirv.framework -output ./veldrid-spirv.xcframework
+    mkdir -p simulator-build-combined/veldrid-spirv.framework
+
+    cp ./simulator-build-arm64/Release-iphonesimulator/veldrid-spirv.framework/Info.plist ./simulator-build-combined/veldrid-spirv.framework/Info.plist
+
+    lipo -create \
+	    ./simulator-build-arm64/Release-iphonesimulator/veldrid-spirv.framework/veldrid-spirv \
+	    ./simulator-build-x64/Release-iphonesimulator/veldrid-spirv.framework/veldrid-spirv \
+	 -output ./simulator-build-combined/veldrid-spirv.framework/veldrid-spirv
+
+    xcodebuild -create-xcframework \
+	    -framework ./device-build/Release-iphoneos/veldrid-spirv.framework \
+	    -framework ./simulator-build-combined/veldrid-spirv.framework \
+	    -output ./veldrid-spirv.xcframework
 else
     cmake ../../.. -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
     cmake --build . --target $_CMakeBuildTarget $_CMakeExtraBuildArgs
