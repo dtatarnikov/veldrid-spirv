@@ -36,8 +36,11 @@ Pre-built binaries are bundled in the NuGet package for the following operating 
 
 * Windows x64
 * Windows x86
-* macOS x64
+* Windows arm64
 * Linux x64
+* Linux arm64
+* macOS x86_64;arm64
 * iOS arm64
 * Android arm64-v8a
 * Android armeabi-v7a
+* Android x86_64
