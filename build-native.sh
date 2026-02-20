@@ -59,6 +59,7 @@ mkdir -p $_OutputPath
 pushd $_OutputPath
 
 if [[ $_OSDir == "ios" ]]; then
+	# Build for iOS device (arm64)
     mkdir -p device-build
     pushd device-build
 
@@ -67,6 +68,7 @@ if [[ $_OSDir == "ios" ]]; then
 
     popd
 
+	# Build for iOS simulator (combined arm64 + x86_64)
     mkdir -p simulator-build-arm64
     pushd simulator-build-arm64
 
@@ -101,10 +103,11 @@ if [[ $_OSDir == "ios" ]]; then
 
     popd
 
+	# Final combine all builds to framework
     xcodebuild -create-xcframework \
 	    -framework ./device-build/Release-iphoneos/veldrid-spirv.framework \
 	    -framework ./simulator-build-combined/veldrid-spirv.framework \
-        -framework ./maccatalyst-build/Release-maccatalyst/veldrid-spirv.framework \
+        -framework ./maccatalyst-build/Release/veldrid-spirv.framework \
 	    -output ./veldrid-spirv.xcframework
 else
     cmake ../../.. -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
