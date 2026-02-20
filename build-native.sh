@@ -92,9 +92,19 @@ if [[ $_OSDir == "ios" ]]; then
 	    ./simulator-build-x64/Release-iphonesimulator/veldrid-spirv.framework/veldrid-spirv \
 	 -output ./simulator-build-combined/veldrid-spirv.framework/veldrid-spirv
 
+	# Build for Mac Catalyst (universal arm64 + x86_64)
+    mkdir -p maccatalyst-build
+    pushd maccatalyst-build
+
+    cmake ../../../.. -DIOS=ON -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator -DPLATFORM=MAC_CATALYST -DDEPLOYMENT_TARGET=13.4 $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+    cmake --build . --target $_CMakeBuildTarget $_CMakeExtraBuildArgs
+
+    popd
+
     xcodebuild -create-xcframework \
 	    -framework ./device-build/Release-iphoneos/veldrid-spirv.framework \
 	    -framework ./simulator-build-combined/veldrid-spirv.framework \
+        -framework ./maccatalyst-build/Release-maccatalyst/veldrid-spirv.framework \
 	    -output ./veldrid-spirv.xcframework
 else
     cmake ../../.. -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
