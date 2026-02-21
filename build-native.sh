@@ -80,7 +80,7 @@ if [[ $_OSDir == "ios" ]]; then
 
 	cmake ../../../.. $_CMakeGenerator -DCMAKE_BUILD_TYPE=$_CMakeBuildType -DCMAKE_TOOLCHAIN_FILE=$_CMakeToolchain -DPLATFORM=MAC_CATALYST_UNIVERSAL -DDEPLOYMENT_TARGET=13.4 $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath
     #cmake --build . --target $_CMakeBuildTarget $_CMakeExtraBuildArgs	
-	xcodebuild -project $_CMakeBuildTarget.xcodeproj -scheme $_CMakeBuildTarget -configuration Release -destination 'generic/platform=iOS,variant=Mac Catalyst' SUPPORTS_MACCATALYST=YES
+	xcodebuild -project $_CMakeBuildTarget.xcodeproj -scheme $_CMakeBuildTarget -configuration Release -destination 'generic/platform=macOS,variant=Mac Catalyst' SUPPORTS_MACCATALYST=YES
 
     popd
 
