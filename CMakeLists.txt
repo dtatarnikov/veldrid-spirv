@@ -1,13 +1,8 @@
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.20)
 
 cmake_policy(SET CMP0057 NEW)
 
 set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
-
-if(IOS)
-    include(ios/ios.toolchain.cmake)
-endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -42,14 +37,16 @@ target_link_libraries(veldrid-spirv
 # macOS builds are expected to be dynamic libraries rather than frameworks,
 # only output frameworks for iOS builds.
 if(IOS)
-    set_target_properties(veldrid-spirv PROPERTIES FRAMEWORK true)
+    set_target_properties(veldrid-spirv PROPERTIES 
+		FRAMEWORK true
+		FRAMEWORK_VERSION A
+	)
 endif()
 
-set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_IDENTIFIER "veldrid-spirv")
-set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_BUNDLE_VERSION "1.0.15")
-set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_SHORT_VERSION_STRING "1.0.15")
-
-set_target_properties(veldrid-spirv PROPERTIES PREFIX "lib")
-set_target_properties(veldrid-spirv PROPERTIES DEBUG_POSTFIX "")
-
-set_target_properties(veldrid-spirv PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
+set_target_properties(veldrid-spirv PROPERTIES 
+	MACOSX_FRAMEWORK_IDENTIFIER "veldrid-spirv"
+	MACOSX_FRAMEWORK_BUNDLE_VERSION "1.0.15"
+	MACOSX_FRAMEWORK_SHORT_VERSION_STRING "1.0.15"
+	PREFIX "lib"
+	DEBUG_POSTFIX ""
+)
