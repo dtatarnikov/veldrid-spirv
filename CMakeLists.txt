@@ -24,6 +24,17 @@ project(veldrid-spirv)
 set(LIBRARY_TYPE SHARED)
 message( "Configured to build a shared library." )
 
+# android (16) builds are required to have 16KB page size
+if(ANDROID)
+	set(CMAKE_ANDROID_SUPPORTS_16K_PAGES ON)
+	add_definitions(-DCMAKE_ANDROID_SUPPORTS_16K_PAGES=ON)
+	add_compile_options(-DSUPPORT_LIBRARY_FLEXIBLE_PAGE_SIZES)	
+	add_link_options(#target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+		"-Wl,-z,max-page-size=16384"
+		"-Wl,-z,common-page-size=16384"
+	)
+endif()
+
 add_library(veldrid-spirv ${LIBRARY_TYPE} ${LIBVELDRID_SPIRV_SOURCES})
 target_link_libraries(veldrid-spirv
     spirv-cross-core
@@ -39,11 +50,6 @@ target_link_libraries(veldrid-spirv
 if(IOS)
 	set_target_properties(veldrid-spirv PROPERTIES FRAMEWORK true)
 	set_target_properties(veldrid-spirv PROPERTIES FRAMEWORK_VERSION A)
-endif()
-
-# android (16) builds are required to have 16KB page size
-if(DEFINED ANDROID OR DEFINED ANDROID_ABI)
-	add_link_options("-Wl,-z,max-page-size=16384")
 endif()
 
 set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_IDENTIFIER "veldrid-spirv")
