@@ -41,6 +41,11 @@ if(IOS)
 	set_target_properties(veldrid-spirv PROPERTIES FRAMEWORK_VERSION A)
 endif()
 
+# android (16) builds are required to have 16KB page size
+if(ANDROID)
+	add_link_options("-Wl,-z,max-page-size=16384")
+elseif()
+
 set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_IDENTIFIER "veldrid-spirv")
 set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_BUNDLE_VERSION "1.0.15")
 set_target_properties(veldrid-spirv PROPERTIES MACOSX_FRAMEWORK_SHORT_VERSION_STRING "1.0.15")
