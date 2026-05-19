@@ -91,8 +91,8 @@ if [[ $_OSDir == "ios" ]]; then
         -framework ./maccatalyst-build/Release/veldrid-spirv.framework \
 	    -output ./veldrid-spirv.xcframework
 else
-    cmake ../../.. -DCMAKE_BUILD_TYPE=$_CMakeBuildType $_CMakeGenerator $_CMakeEnableBitcode -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
-    cmake --build . --target $_CMakeBuildTarget $_CMakeExtraBuildArgs
+    cmake ../../.. -DCMAKE_BUILD_TYPE=$_CMakeBuildType -DPYTHON_EXECUTABLE=$_PythonExePath -DCMAKE_OSX_ARCHITECTURES="$_CMakeOsxArchitectures"
+    cmake --build . --target $_CMakeBuildTarget
 fi
 
 popd
