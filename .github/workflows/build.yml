@@ -26,15 +26,15 @@ jobs:
             build_target: win-arm64
             artifact_name: build\Release\win-arm64\libveldrid-spirv.dll
           - os: windows-latest
-            build_args: release android arm64-v8a --android-ndk '%ANDROID_NDK_HOME%' --android-platform 'android-29'
+            build_args: release android arm64-v8a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-arm64-v8a
             artifact_name: build\Release\android-arm64-v8a\libveldrid-spirv.so
           - os: windows-latest
-            build_args: release android x86_64 --android-ndk '%ANDROID_NDK_HOME%' --android-platform 'android-29'
+            build_args: release android x86_64 --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-x86_64
             artifact_name: build\Release\android-x86_64\libveldrid-spirv.so
           - os: windows-latest
-            build_args: release android armeabi-v7a --android-ndk '%ANDROID_NDK_HOME%' --android-platform 'android-29'
+            build_args: release android armeabi-v7a --android-ndk '%ANDROID_NDK_HOME%'
             build_target: android-armeabi-v7a
             artifact_name: build\Release\android-armeabi-v7a\libveldrid-spirv.so
           - os: ubuntu-22.04
@@ -63,8 +63,10 @@ jobs:
       - name: Setup Android NDK
         if: ${{ startsWith(matrix.build_target, 'android-') }}
         uses: nttld/setup-ndk@v1
+        id: setup-ndk
         with:
           ndk-version: r29 # or a full version number like 27.3.13750724
+          add-to-path: false
             
       - name: Get Submodules
         run: git submodule update --init --recursive
@@ -86,6 +88,8 @@ jobs:
                 ./build-native.sh ${{ matrix.build_args }}
               fi
         shell: bash
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Compress iOS Framework For Upload
         if: ${{ matrix.build_target == 'ios' }}
