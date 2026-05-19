@@ -42,7 +42,7 @@ if(IOS)
 endif()
 
 # android (16) builds are required to have 16KB page size
-if(ANDROID)
+if(DEFINED ANDROID OR DEFINED ANDROID_ABI)
 	add_link_options("-Wl,-z,max-page-size=16384")
 endif()
 
