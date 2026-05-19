@@ -63,8 +63,8 @@ jobs:
       - name: Setup Android NDK
         if: ${{ startsWith(matrix.build_target, 'android-') }}
         uses: nttld/setup-ndk@v1
-          with:
-            ndk-version: r29 # or a full version number like 27.3.13750724
+        with:
+          ndk-version: r29 # or a full version number like 27.3.13750724
             
       - name: Get Submodules
         run: git submodule update --init --recursive
