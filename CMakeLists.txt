@@ -24,7 +24,7 @@ project(veldrid-spirv)
 set(LIBRARY_TYPE SHARED)
 message( "Configured to build a shared library." )
 
-# android (16) builds are required to have 16KB page size
+# Android 16 (API level 36+) requires 16 KB page size alignment for shared libraries.
 if(ANDROID)
 	set(CMAKE_ANDROID_SUPPORTS_16K_PAGES ON)
 	add_definitions(-DCMAKE_ANDROID_SUPPORTS_16K_PAGES=ON)
